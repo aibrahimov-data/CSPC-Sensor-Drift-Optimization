@@ -8,11 +8,13 @@ dataset:
   ethanol_class: 1
   ethylene_class: 2
 
-  expected_binary_samples: 3577
+  expected_binary_samples: 5491
 
   sensors: 16
   features_per_sensor: 8
   total_features: 128
+
+  concentration_range: [10, 300]
 
   concentration_range: [10, 300]
 
