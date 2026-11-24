@@ -1,0 +1,19 @@
+name: cspc-sensor-drift
+
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults    #I noticed a channel problem and used GPT to solve
+
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - pyyaml
+  - pytest
+  - snakemake
+  - jupyterlab
