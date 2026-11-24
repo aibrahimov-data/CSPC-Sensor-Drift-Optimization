@@ -1,0 +1,52 @@
+project:
+  name: CSPC-Sensor-Drift-Optimization
+  random_seed: 42
+
+dataset:
+  uci_id: 270
+
+  ethanol_class: 1
+  ethylene_class: 2
+
+  expected_binary_samples: 3577
+
+  sensors: 16
+  features_per_sensor: 8
+  total_features: 128
+
+  concentration_range: [10, 300]
+
+splitting:
+  train_batches: [1, 2, 3]
+
+  validation_batches: [4, 5]
+
+  source_batches: [1, 2, 3, 4, 5]
+
+  test_batches: [6, 7, 8, 9, 10]
+
+sensor_selection:
+  budgets: [4, 8, 16]
+
+  strategies:
+    - all
+    - random
+    - importance
+    - stability
+    - hybrid
+
+recalibration:
+  target_batches: [7, 10]
+
+  holdout_fraction: 0.30
+  holdout_seed: 2026
+
+  budgets_per_class: [0, 5, 10, 20]
+
+  sampling_seeds: [11, 22, 33, 44, 55]
+
+evaluation:
+  metrics:
+    - balanced_accuracy
+    - macro_f1
+    - recall_per_class
