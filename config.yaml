@@ -50,3 +50,9 @@ evaluation:
     - balanced_accuracy
     - macro_f1
     - recall_per_class
+
+models:
+  knn:
+    k_values: [1, 3, 5, 7, 9, 11, 15, 21]
+    weights: uniform
+    selection_metric: balanced_accuracy
