@@ -237,3 +237,6 @@ data/processed/*.csv
 # Python cache
 __pycache__/
 .pytest_cache/
+
+# scratch files
+scratch_knn.py
