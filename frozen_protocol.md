@@ -141,6 +141,16 @@ Implementation requirements:
 
 Both main classifiers must use identical dataset splits and evaluation metrics.
 
+#### 4.4. Descriptive PCA
+
+PCA is used only as a descriptive visualisation and is not used for model selection or sensor selection.
+
+- `StandardScaler` and PCA (10 components) are fitted on the source batches 1–5 only.
+- The same fitted transformation is applied to the future batches 6–10.
+- The first two components are plotted by gas and by batch.
+- Concentration is not used as an input.
+- PCA projections do not show that two gas classes are indistinguishable.
+
 ### 5. Sensor Selection
 
 We compare three sensor budgets:
@@ -351,3 +361,4 @@ This protocol was revised before final model evaluation to correct:
 The original research question, temporal evaluation strategy, sensor budgets, and recalibration objectives remain unchanged.
 
 - The KNN selection rule for k (Section 4.2) was added before evaluation of future batches.
+- Section 4.4 (descriptive PCA) was added before evaluation of future batches.
