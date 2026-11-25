@@ -115,6 +115,16 @@ Implementation requirements:
 - Evaluate Balanced Accuracy and Macro F1.
 - Investigate sensitivity to sensor selection and recalibration.
 
+**Selection of k (defined before any evaluation of future batches):**
+
+- Candidate values: k ∈ {1, 3, 5, 7, 9, 11, 15, 21, 31, 41}, as listed in `config.yaml`.
+- Each candidate is fitted on the initial training batches (1–3) and scored on the validation batches (4–5).
+- The selected k is the value with the highest validation Balanced Accuracy. Ties are resolved in favour of the smallest k.
+- k is selected once using all 16 sensors. The same k is used for every sensor subset (4, 8, 16 sensors) and every recalibration budget.
+- The final KNN models are refitted on batches 1–5 (plus calibration samples in the recalibration experiment) using the selected k.
+- Result: k = 21. Validation Balanced Accuracy is 1.000 for k = 21, 31 and 41, so the smallest value is selected.
+- k is not changed after inspecting results on batches 6–10.
+
 #### 4.3. Decision Tree
 
 Decision Tree performs classification through successive feature-based decisions.
@@ -339,3 +349,5 @@ This protocol was revised before final model evaluation to correct:
 - The principal classification models to KNN and Decision Tree, matching CSPC Lecture 4.
 
 The original research question, temporal evaluation strategy, sensor budgets, and recalibration objectives remain unchanged.
+
+- The KNN selection rule for k (Section 4.2) was added before evaluation of future batches.
