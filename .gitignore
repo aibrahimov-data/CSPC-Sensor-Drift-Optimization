@@ -228,7 +228,7 @@ __marimo__/
 # Raw and generated datasets
 data/raw/**/*.dat
 data/raw/*.zip
-data/processed/*.csv
+# data/processed/*.csv
 
 # Conda environments
 .conda/
