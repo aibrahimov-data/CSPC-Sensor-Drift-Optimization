@@ -179,8 +179,15 @@ For each selected sensor, all eight associated features are retained.
 
 Selection methods and their parameters must be defined before inspecting final test performance.
 
-
 **Stability score (source-only):** for each gas, the standardized mean shift of every feature is computed for the pooled validation batches (4–5) relative to the initial training batches (1–3): (mean_validation − mean_training) / std_training. A sensor's shift is the mean absolute shift of its eight features, averaged over the two gases. Only observations within 10–300 ppmv are used. Lower values indicate more stable sensors, and rank 1 is the most stable sensor. Batches 6–10 are never used for the ranking. Shifts for batches 6–10 are reported descriptively only.
+
+**Importance score (source-only):** KNN (selected k) is fitted on batches 1–3 using all 16 sensors. On the validation batches (4–5), the eight features of one sensor are shuffled together across observations (20 repetitions, seed 42) and the increase of the Brier score is recorded. Sensors are ranked by the mean increase (largest = most important). The Brier score is used because the validation accuracy is saturated. The ranking is computed once and used for both classifiers.
+
+**Hybrid score:** mean of the importance rank and the stability rank (50% / 50%). Ties are resolved in favour of the more important sensor.
+
+**Random selection:** for each sampling seed (11, 22, 33, 44, 55), k unique sensors are drawn with that seed. The subset for a seed is used together with the calibration sampling seed of the same value.
+
+**Budget 16:** only the "all sensors" strategy is evaluated, because every other strategy selects all sensors at this budget.
 
 
 ### 6. Recalibration Experiment
@@ -367,3 +374,4 @@ The original research question, temporal evaluation strategy, sensor budgets, an
 - The KNN selection rule for k (Section 4.2) was added before evaluation of future batches.
 - Section 4.4 (descriptive PCA) was added before evaluation of future batches.
 - The sensor stability score (Section 5) was defined before evaluation of future batches.
+- The importance score, hybrid score, random selection and budget-16 rules (Section 5) were defined before evaluation of future batches.
