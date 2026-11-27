@@ -222,13 +222,12 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-/data/raw/**/*.dat
-/data/raw/*.zip
-
 # Raw and generated datasets
-data/raw/**/*.dat
-data/raw/*.zip
-data/processed/*.csv
+# /data/raw/**/*.dat
+# /data/raw/*.zip
+# data/raw/**/*.dat
+# data/raw/*.zip
+# data/processed/*.csv
 
 # Conda environments
 .conda/
