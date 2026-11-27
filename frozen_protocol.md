@@ -115,6 +115,16 @@ Implementation requirements:
 - Evaluate Balanced Accuracy and Macro F1.
 - Investigate sensitivity to sensor selection and recalibration.
 
+**Selection of k (defined before any evaluation of future batches):**
+
+- Candidate values: k ∈ {1, 3, 5, 7, 9, 11, 15, 21, 31, 41}, as listed in `config.yaml`.
+- Each candidate is fitted on the initial training batches (1–3) and scored on the validation batches (4–5).
+- The selected k is the value with the highest validation Balanced Accuracy. Ties are resolved in favour of the smallest k.
+- k is selected once using all 16 sensors. The same k is used for every sensor subset (4, 8, 16 sensors) and every recalibration budget.
+- The final KNN models are refitted on batches 1–5 (plus calibration samples in the recalibration experiment) using the selected k.
+- Result: k = 21. Validation Balanced Accuracy is 1.000 for k = 21, 31 and 41, so the smallest value is selected.
+- k is not changed after inspecting results on batches 6–10.
+
 #### 4.3. Decision Tree
 
 Decision Tree performs classification through successive feature-based decisions.
@@ -130,6 +140,16 @@ Implementation requirements:
 - Evaluate sensitivity to sensor selection and recalibration.
 
 Both main classifiers must use identical dataset splits and evaluation metrics.
+
+#### 4.4. Descriptive PCA
+
+PCA is used only as a descriptive visualisation and is not used for model selection or sensor selection.
+
+- `StandardScaler` and PCA (10 components) are fitted on the source batches 1–5 only.
+- The same fitted transformation is applied to the future batches 6–10.
+- The first two components are plotted by gas and by batch.
+- Concentration is not used as an input.
+- PCA projections do not show that two gas classes are indistinguishable.
 
 ### 5. Sensor Selection
 
@@ -158,6 +178,17 @@ Final evaluation batches must not influence the selection of sensor subsets.
 For each selected sensor, all eight associated features are retained.
 
 Selection methods and their parameters must be defined before inspecting final test performance.
+
+**Stability score (source-only):** for each gas, the standardized mean shift of every feature is computed for the pooled validation batches (4–5) relative to the initial training batches (1–3): (mean_validation − mean_training) / std_training. A sensor's shift is the mean absolute shift of its eight features, averaged over the two gases. Only observations within 10–300 ppmv are used. Lower values indicate more stable sensors, and rank 1 is the most stable sensor. Batches 6–10 are never used for the ranking. Shifts for batches 6–10 are reported descriptively only.
+
+**Importance score (source-only):** KNN (selected k) is fitted on batches 1–3 using all 16 sensors. On the validation batches (4–5), the eight features of one sensor are shuffled together across observations (20 repetitions, seed 42) and the increase of the Brier score is recorded. Sensors are ranked by the mean increase (largest = most important). The Brier score is used because the validation accuracy is saturated. The ranking is computed once and used for both classifiers.
+
+**Hybrid score:** mean of the importance rank and the stability rank (50% / 50%). Ties are resolved in favour of the more important sensor.
+
+**Random selection:** for each sampling seed (11, 22, 33, 44, 55), k unique sensors are drawn with that seed. The subset for a seed is used together with the calibration sampling seed of the same value.
+
+**Budget 16:** only the "all sensors" strategy is evaluated, because every other strategy selects all sensors at this budget.
+
 
 ### 6. Recalibration Experiment
 
@@ -339,3 +370,8 @@ This protocol was revised before final model evaluation to correct:
 - The principal classification models to KNN and Decision Tree, matching CSPC Lecture 4.
 
 The original research question, temporal evaluation strategy, sensor budgets, and recalibration objectives remain unchanged.
+
+- The KNN selection rule for k (Section 4.2) was added before evaluation of future batches.
+- Section 4.4 (descriptive PCA) was added before evaluation of future batches.
+- The sensor stability score (Section 5) was defined before evaluation of future batches.
+- The importance score, hybrid score, random selection and budget-16 rules (Section 5) were defined before evaluation of future batches.
