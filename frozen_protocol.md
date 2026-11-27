@@ -179,6 +179,10 @@ For each selected sensor, all eight associated features are retained.
 
 Selection methods and their parameters must be defined before inspecting final test performance.
 
+
+**Stability score (source-only):** for each gas, the standardized mean shift of every feature is computed for the pooled validation batches (4–5) relative to the initial training batches (1–3): (mean_validation − mean_training) / std_training. A sensor's shift is the mean absolute shift of its eight features, averaged over the two gases. Only observations within 10–300 ppmv are used. Lower values indicate more stable sensors, and rank 1 is the most stable sensor. Batches 6–10 are never used for the ranking. Shifts for batches 6–10 are reported descriptively only.
+
+
 ### 6. Recalibration Experiment
 
 **Target batches:**
@@ -362,3 +366,4 @@ The original research question, temporal evaluation strategy, sensor budgets, an
 
 - The KNN selection rule for k (Section 4.2) was added before evaluation of future batches.
 - Section 4.4 (descriptive PCA) was added before evaluation of future batches.
+- The sensor stability score (Section 5) was defined before evaluation of future batches.
